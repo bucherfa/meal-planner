@@ -1,0 +1,120 @@
+<template>
+  <el-card class="item">
+    <div v-for="(meal, mealKey) of dayCopy" :key="mealKey">
+      <div>{{ displayStringFirstCap(mealKey) }}</div>
+      <div class="item__input-rows">
+        <div v-for="(item, index) of meal" :key="index" class="item__input-row">
+          <el-input
+            v-model="dayCopy[mealKey][index]"
+            type="textarea"
+            autosize
+            resize="none"
+            placeholder="Please input"
+            @change="update"
+          />
+          <div class="item__input-actions">
+            <el-button size="small" icon="el-icon-delete" @click="deleteItem(mealKey, index)" />
+          </div>
+        </div>
+        <el-button-group class="item__adds">
+          <el-button size="small" icon="el-icon-magic-stick" class="item__add" round @click="addRandomItem(mealKey)" />
+          <el-button size="small" icon="el-icon-plus" class="item__add" round @click="addItem(mealKey)" />
+        </el-button-group>
+      </div>
+    </div>
+  </el-card>
+</template>
+
+<script>
+import rn from 'random-number-csprng'
+
+export default {
+  name: 'EditDay',
+  data () {
+    return {
+      dayCopy: {}
+    }
+  },
+  computed: {
+    dayKey () {
+      return this.$route.params.key
+    },
+    day () {
+      return this.$store.getters.day(this.dayKey)
+    },
+    suggestions () {
+      return this.$store.getters.suggestions
+    }
+  },
+  created () {
+    this.$store.dispatch('activateClosableHeader')
+    const matchesRegEx = this.dayKey.match(/^\d{4}-\d{2}-\d{2}$/g)
+    const invalidDay = isNaN(new Date(this.dayKey).getTime())
+    if (!matchesRegEx && invalidDay) {
+      this.$router.replace({ path: '/' })
+    }
+    this.dayCopy = JSON.parse(JSON.stringify(this.day))
+  },
+  beforeDestroy () {
+    this.$store.dispatch('deactivateClosableHeader')
+  },
+  methods: {
+    displayStringFirstCap (string) {
+      return string.charAt(0).toUpperCase() + string.slice(1)
+    },
+    addItem (mealKey) {
+      this.dayCopy[mealKey].push('')
+    },
+    async addRandomItem (mealKey) {
+      const sugLength = this.suggestions[mealKey].length
+      if (sugLength < 1) {
+        this.addItem(mealKey)
+      } else {
+        const randomNumber = sugLength === 1 ? 0 : await rn(0, sugLength - 1)
+        this.dayCopy[mealKey].push(this.suggestions[mealKey][randomNumber])
+      }
+    },
+    update () {
+      const newDay = JSON.parse(JSON.stringify(this.dayCopy))
+      for (const mealKey of Object.keys(newDay)) {
+        let meal = newDay[mealKey]
+        meal = meal.map(item => item.replace(/\s+/g, ' ').trim())
+        newDay[mealKey] = meal.filter(item => item !== '')
+      }
+      this.$store.dispatch('saveDay', { day: newDay, dayKey: this.dayKey })
+    },
+    deleteItem (mealKey, index) {
+      this.dayCopy[mealKey].splice(index, 1)
+      this.update()
+    }
+  }
+}
+</script>
+
+<style scoped>
+.item {
+  margin: 0.75rem;
+  text-align: left;
+}
+
+.item__input-rows {
+  margin: 0.25rem 0 0.25rem 0.5rem ;
+}
+
+.item__input-row {
+  display: flex;
+  margin-bottom: 0.25rem;
+}
+
+.item__input-actions {
+  margin-left: 0.5rem;
+}
+
+.item__adds {
+  width: 100%;
+}
+
+.item__add {
+  width: 50%;
+}
+</style>
