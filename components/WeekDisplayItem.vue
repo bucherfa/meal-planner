@@ -100,7 +100,7 @@ export default {
 }
 
 .item__item-title {
-  width: 5rem;
+  min-width: 5rem;
   font-size: 0.75rem;
   margin-top: 0.25rem;
 }

@@ -17,11 +17,22 @@
           </div>
         </div>
         <el-button-group class="item__adds">
+          <el-button size="small" icon="el-icon-search" class="item__add" round @click="searchItem(mealKey)" />
           <el-button size="small" icon="el-icon-magic-stick" class="item__add" round @click="addRandomItem(mealKey)" />
           <el-button size="small" icon="el-icon-plus" class="item__add" round @click="addItem(mealKey)" />
         </el-button-group>
       </div>
     </div>
+    <el-dialog v-if="dialogSearchMealType" title="Select a Meal" :visible.sync="dialogSearchVisible" :fullscreen="true">
+      <el-table
+        :data="suggestions[dialogSearchMealType].map(item => { const obj = {}; obj.key=item; return obj})"
+        row-class-name="table__row"
+        :stripe="true"
+        @row-click="handleTableRowClick"
+      >
+        <el-table-column prop="key" />
+      </el-table>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -32,7 +43,9 @@ export default {
   name: 'EditDay',
   data () {
     return {
-      dayCopy: {}
+      dayCopy: {},
+      dialogSearchVisible: false,
+      dialogSearchMealType: undefined
     }
   },
   computed: {
@@ -87,6 +100,17 @@ export default {
     deleteItem (mealKey, index) {
       this.dayCopy[mealKey].splice(index, 1)
       this.update()
+    },
+    searchItem (mealKey) {
+      // eslint-disable-next-line no-console
+      console.log('TODO')
+      this.dialogSearchMealType = mealKey
+      this.dialogSearchVisible = true
+    },
+    handleTableRowClick (row) {
+      this.dayCopy[this.dialogSearchMealType].push(row.key)
+      this.dialogSearchVisible = false
+      this.update()
     }
   }
 }
@@ -116,6 +140,6 @@ export default {
 }
 
 .item__add {
-  width: 50%;
+  width: 33.333%;
 }
 </style>
