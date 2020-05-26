@@ -19,8 +19,11 @@ export default {
   name: 'WeekSelector',
   data () {
     return {
-      week: new Date()
+      week: undefined
     }
+  },
+  created () {
+    this.week = this.$store.getters.week || new Date()
   },
   methods: {
     handleWeekChange () {

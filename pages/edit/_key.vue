@@ -72,6 +72,7 @@ export default {
       } else {
         const randomNumber = sugLength === 1 ? 0 : await rn(0, sugLength - 1)
         this.dayCopy[mealKey].push(this.suggestions[mealKey][randomNumber])
+        this.update()
       }
     },
     update () {

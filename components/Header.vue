@@ -1,16 +1,45 @@
 <template>
   <header class="header">
     <h3>Meal Planner</h3>
-    <i v-if="closable" class="el-icon-close header__close" @click="close" />
+    <div class="header__action">
+      <i v-if="closable" class="el-icon-close header__action-item" @click="close" />
+      <div v-if="!closable && !copying">
+        <i class="el-icon-document-copy header__action-item" @click="copy" />
+        <i class="el-icon-menu header__action-item" @click="toggleDrawer" />
+      </div>
+      <div v-if="copying && !closable">
+        <i class="el-icon-check header__action-item" @click="paste" />
+        <i class="el-icon-close header__action-item" @click="cancelCopy" />
+      </div>
+    </div>
+    <el-drawer
+      title="Menu"
+      :visible.sync="drawer"
+      direction="rtl"
+      size="16rem"
+    >
+      <DrawerBody @closeDrawer="toggleDrawer" />
+    </el-drawer>
   </header>
 </template>
 
 <script>
+import DrawerBody from './DrawerBody'
+
 export default {
   name: 'Header',
+  components: { DrawerBody },
+  data () {
+    return {
+      drawer: false
+    }
+  },
   computed: {
     closable () {
       return this.$store.getters.headerClosable
+    },
+    copying () {
+      return this.$store.getters.toCopy.length > 0
     }
   },
   methods: {
@@ -20,6 +49,18 @@ export default {
       } else {
         this.$router.push('/')
       }
+    },
+    copy () {
+      this.$store.dispatch('startCopy')
+    },
+    cancelCopy () {
+      this.$store.dispatch('resetCopy')
+    },
+    paste () {
+      this.$store.dispatch('applyCopy')
+    },
+    toggleDrawer () {
+      this.drawer = !this.drawer
     }
   }
 }
@@ -32,12 +73,15 @@ export default {
   padding: 1rem;
 }
 
-.header__close {
-  cursor: pointer;
+.header__action {
   font-size: 2rem;
   position: absolute;
   top: 0.65rem;
   right: 1rem;
+}
+
+.header__action-item {
+  cursor: pointer;
   padding-left: 1rem;
 }
 </style>

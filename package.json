@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "My stellar Nuxt.js project",
   "author": "Fabian Bucher",
+  "homepage": "https://github.com/bucherfa/meal-planner",
   "private": true,
   "scripts": {
     "dev": "nuxt",

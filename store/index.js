@@ -1,9 +1,12 @@
+import Vue from 'vue'
+
 export const state = () => ({
   week: new Date(),
   data: {},
   header: {
     closable: false
-  }
+  },
+  toCopy: []
 })
 
 export const mutations = {
@@ -11,10 +14,16 @@ export const mutations = {
     state.week = value
   },
   saveDay (state, value) {
-    state.data[value.dayKey] = value.day
+    Vue.set(state.data, value.dayKey, value.day)
   },
   setHeaderClosable (state, value) {
     state.header.closable = value
+  },
+  setCopy (state, value) {
+    state.toCopy = value
+  },
+  setData (state, value) {
+    state.data = value
   }
 }
 
@@ -30,6 +39,27 @@ export const actions = {
   },
   deactivateClosableHeader ({ commit }) {
     commit('setHeaderClosable', false)
+  },
+  startCopy ({ commit, getters }) {
+    const toCopy = Object.values(JSON.parse(JSON.stringify(getters.weekDays)))
+    commit('setCopy', toCopy)
+  },
+  resetCopy ({ commit }) {
+    commit('setCopy', [])
+  },
+  applyCopy ({ commit, dispatch, getters }) {
+    const dateKeys = Object.keys(JSON.parse(JSON.stringify(getters.weekDays)))
+    const dayValues = JSON.parse(JSON.stringify(getters.toCopy))
+    for (let i = 0; i < dateKeys.length; i++) {
+      commit('saveDay', { dayKey: dateKeys[i], day: dayValues[i] })
+    }
+    dispatch('resetCopy')
+  },
+  setData ({ commit }, value) {
+    commit('setData', value)
+  },
+  resetData ({ dispatch }) {
+    dispatch('setData', {})
   }
 }
 
@@ -44,8 +74,8 @@ export const getters = {
   },
   weekDays: (state, getters) => {
     const weekDays = {}
-    const startDate = new Date()
-    startDate.setDate((state.week.getDate() - state.week.getDay()))
+    const startDate = new Date(state.week)
+    startDate.setDate(startDate.getDate() - startDate.getDay())
     for (let i = 0; i < 7; i++) {
       const key = new Date(startDate).toISOString().split('T')[0]
       if (state.data[key]) {
@@ -66,7 +96,11 @@ export const getters = {
     const arrayOfDays = Object.values(state.data)
     for (const meal of Object.keys(suggestions)) {
       suggestions[meal] = arrayOfDays.flatMap(day => day[meal])
+      suggestions[meal] = suggestions[meal].filter((value, index, self) => self.indexOf(value) === index)
     }
     return suggestions
-  }
+  },
+  toCopy: state => state.toCopy,
+  week: state => state.week,
+  data: state => state.data
 }
