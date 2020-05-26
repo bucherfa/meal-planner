@@ -102,8 +102,6 @@ export default {
       this.update()
     },
     searchItem (mealKey) {
-      // eslint-disable-next-line no-console
-      console.log('TODO')
       this.dialogSearchMealType = mealKey
       this.dialogSearchVisible = true
     },

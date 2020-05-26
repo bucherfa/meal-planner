@@ -1,5 +1,14 @@
+require('dotenv').config()
+
+// only add `router.base = '/<repository-name>/'` if `DEPLOY_ENV` is `GH_PAGES`
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+  router: {
+    base: '/meal-planner/'
+  }
+} : {}
 
 export default {
+  ...routerBase,
   mode: 'universal',
   /*
   ** Headers of the page
@@ -38,7 +47,9 @@ export default {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    // https://github.com/bdrtsky/nuxt-ackee
+    'nuxt-ackee'
   ],
   /*
   ** Nuxt.js modules
@@ -66,5 +77,9 @@ export default {
     */
     extend (config, ctx) {
     }
+  },
+  ackee: {
+    server: process.env.ACKEE_SERVER,
+    domainId: process.env.ACKEE_DOMAIN_ID
   }
 }
