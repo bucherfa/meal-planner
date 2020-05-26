@@ -1,6 +1,16 @@
-# meal-planner
+# Meal Planner
 
-> My stellar Nuxt.js project
+> Easy to use offline meal planner. Optimised for smartphones and tablets
+
+## Features
+
+- Week overview
+- Switch between weeks
+- Edit meals per day
+- Copy weeks
+- Backup and restore
+- Select from previous meals
+- Magic meal selector
 
 ## Build Setup
 
