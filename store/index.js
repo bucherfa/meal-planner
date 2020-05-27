@@ -75,7 +75,7 @@ export const getters = {
   weekDays: (state, getters) => {
     const weekDays = {}
     const startDate = new Date(state.week)
-    startDate.setDate(startDate.getDate() - startDate.getDay())
+    startDate.setDate(startDate.getDate() - startDate.getDay() + 1)
     for (let i = 0; i < 7; i++) {
       const key = new Date(startDate).toISOString().split('T')[0]
       if (state.data[key]) {

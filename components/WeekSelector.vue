@@ -8,6 +8,7 @@
       placeholder="Pick a week"
       class="selector__week"
       :clearable="false"
+      :picker-options="{ firstDayOfWeek: 1 }"
       @change="handleWeekChange"
     />
     <el-button class="selector__button" icon="el-icon-arrow-right" @click="changeDate(7)" />
