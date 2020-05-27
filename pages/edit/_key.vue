@@ -17,9 +17,9 @@
           </div>
         </div>
         <el-button-group class="item__adds">
+          <el-button size="small" icon="el-icon-plus" class="item__add" round @click="addItem(mealKey)" />
           <el-button size="small" icon="el-icon-search" class="item__add" round @click="searchItem(mealKey)" />
           <el-button size="small" icon="el-icon-magic-stick" class="item__add" round @click="addRandomItem(mealKey)" />
-          <el-button size="small" icon="el-icon-plus" class="item__add" round @click="addItem(mealKey)" />
         </el-button-group>
       </div>
     </div>
