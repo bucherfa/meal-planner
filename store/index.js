@@ -97,6 +97,7 @@ export const getters = {
     for (const meal of Object.keys(suggestions)) {
       suggestions[meal] = arrayOfDays.flatMap(day => day[meal])
       suggestions[meal] = suggestions[meal].filter((value, index, self) => self.indexOf(value) === index)
+      suggestions[meal].sort()
     }
     return suggestions
   },
