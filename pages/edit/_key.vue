@@ -23,6 +23,11 @@
         </el-button-group>
       </div>
     </div>
+    <div class="item__actions">
+      <el-button size="small" type="primary" class="item__save" @click="close">
+        Save
+      </el-button>
+    </div>
     <el-dialog v-if="dialogSearchMealType" title="Select a Meal" :visible.sync="dialogSearchVisible" :fullscreen="true">
       <el-table
         :data="suggestions[dialogSearchMealType].map(item => { const obj = {}; obj.key=item; return obj})"
@@ -109,6 +114,13 @@ export default {
       this.dayCopy[this.dialogSearchMealType].push(row.key)
       this.dialogSearchVisible = false
       this.update()
+    },
+    close () {
+      if (window.History.length > 0) {
+        this.$router.replace('/')
+      } else {
+        this.$router.push('/')
+      }
     }
   }
 }
@@ -139,5 +151,15 @@ export default {
 
 .item__add {
   width: 33.333%;
+}
+
+.item__actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.item__save {
+  width: 50%;
 }
 </style>
