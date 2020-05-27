@@ -5,6 +5,7 @@
       <div class="item__input-rows">
         <div v-for="(item, index) of meal" :key="index" class="item__input-row">
           <el-input
+            :ref="mealKey + index"
             v-model="dayCopy[mealKey][index]"
             type="textarea"
             autosize
@@ -82,6 +83,10 @@ export default {
     },
     addItem (mealKey) {
       this.dayCopy[mealKey].push('')
+      const index = this.dayCopy[mealKey].length - 1
+      setTimeout(() => {
+        this.$refs[mealKey + index][0].focus()
+      }, 0)
     },
     async addRandomItem (mealKey) {
       const sugLength = this.suggestions[mealKey].length
