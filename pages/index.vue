@@ -19,6 +19,7 @@ export default {
 
 <style>
 .main {
+  margin-top: 3.3rem;
   text-align: center;
 }
 </style>

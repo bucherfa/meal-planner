@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="week">
     <WeekDisplayItem v-for="(day, key) of weekDays" :key="key" :day="day" :day-key="key" />
   </div>
 </template>
@@ -18,5 +18,7 @@ export default {
 </script>
 
 <style scoped>
-
+.week {
+  padding-top: 3.5rem;
+}
 </style>

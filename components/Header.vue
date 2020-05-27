@@ -17,6 +17,7 @@
       :visible.sync="drawer"
       direction="rtl"
       size="16rem"
+      :append-to-body="true"
     >
       <DrawerBody @closeDrawer="toggleDrawer" />
     </el-drawer>
@@ -68,9 +69,13 @@ export default {
 
 <style scoped>
 .header {
+  position: fixed;
   background-color: #D66B24;
   color: white;
   padding: 1rem;
+  width: 100%;
+  top: 0;
+  z-index: 100;
 }
 
 .header__action {

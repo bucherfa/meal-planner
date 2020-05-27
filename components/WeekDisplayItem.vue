@@ -1,8 +1,7 @@
 <template>
-  <el-card class="item" :class="dayInPast ? 'item--past' : ''" shadow="always">
+  <el-card ref="item" class="item" :class="dayInPast ? 'item--past' : today ? 'item--today' : ''" shadow="never">
     <div slot="header" class="item__header">
       <span>{{ displayDate }}</span>
-      <span v-if="today" class="item__today" />
       <el-button class="item__action" icon="el-icon-edit" type="text" @click="handleActionClick" />
     </div>
     <div v-for="(meal, mealKey) of day" :key="mealKey" class="item__item">
@@ -36,7 +35,7 @@ export default {
       if (process.browser) {
         language = window.navigator.language
       }
-      const options = { weekday: 'short', month: 'short', day: 'numeric' }
+      const options = { weekday: 'long', month: 'short', day: 'numeric' }
       return new Date(this.dayKey).toLocaleString(language, options)
     },
     dayInPast () {
@@ -44,6 +43,12 @@ export default {
     },
     today () {
       return new Date().toISOString().split('T')[0] === this.dayKey
+    }
+  },
+  mounted () {
+    if (this.today) {
+      this.$refs.item.$el.scrollIntoView()
+      window.scrollTo({ top: window.pageYOffset - 120 })
     }
   },
   methods: {
@@ -66,6 +71,10 @@ export default {
 
 .item--past {
   background: rgba(0,0,0,0.03);
+}
+
+.item--today {
+  background: #faf0e9;
 }
 
 .item__header {

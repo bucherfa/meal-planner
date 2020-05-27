@@ -133,7 +133,7 @@ export default {
 
 <style scoped>
 .item {
-  margin: 0.75rem;
+  margin: 4rem 0.75rem 0.75rem 0.75rem;
   text-align: left;
 }
 

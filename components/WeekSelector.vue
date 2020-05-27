@@ -31,6 +31,7 @@ export default {
       this.$store.dispatch('updateWeek', this.week)
     },
     changeDate (amount) {
+      window.scroll(0, 0)
       const date = new Date(this.week)
       date.setDate(date.getDate() + amount)
       this.week = date
@@ -42,7 +43,12 @@ export default {
 
 <style scoped>
 .selector {
-  margin-top: 1rem;
+  background: white;
+  position: fixed;
+  width: 100%;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  z-index: 50;
 }
 .selector__week {
   width: 8rem;
