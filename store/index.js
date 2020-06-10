@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 export const state = () => ({
-  week: new Date(),
+  week: undefined,
   data: {},
   header: {
     closable: false
@@ -74,7 +74,7 @@ export const getters = {
   },
   weekDays: (state, getters) => {
     const weekDays = {}
-    const startDate = new Date(state.week)
+    const startDate = new Date(state.week || new Date())
     startDate.setDate(startDate.getDate() - startDate.getDay() + 1)
     for (let i = 0; i < 7; i++) {
       const key = new Date(startDate).toISOString().split('T')[0]
