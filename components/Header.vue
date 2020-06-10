@@ -1,6 +1,11 @@
 <template>
   <header class="header">
-    <h3>Meal Planner</h3>
+    <h3 v-if="dayKey">
+      {{ displayDate }}
+    </h3>
+    <h3 v-else>
+      Meal Planner
+    </h3>
     <div class="header__action">
       <i v-if="closable" class="el-icon-close header__action-item" @click="close" />
       <div v-if="!closable && !copying">
@@ -41,6 +46,17 @@ export default {
     },
     copying () {
       return this.$store.getters.toCopy.length > 0
+    },
+    dayKey () {
+      return this.$route.params.key
+    },
+    displayDate () {
+      let language = 'en-us'
+      if (process.browser) {
+        language = window.navigator.language
+      }
+      const options = { weekday: 'long', month: 'short', day: 'numeric' }
+      return new Date(this.dayKey).toLocaleString(language, options)
     }
   },
   methods: {
